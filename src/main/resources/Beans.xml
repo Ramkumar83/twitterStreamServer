@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>classpath:twitterStream.properties</value>
+        </property>
+    </bean>
+    <bean id="tweetDataStore" class="com.ebuddy.twitter.TweetDataStore" factory-method="createInstance">
+        <constructor-arg value="${filters}"/>
+    </bean>
+    <bean id="twitterStreamClient" class="com.ebuddy.twitter.stream.client.TwitterStreamClient" destroy-method="stopStream" init-method="startStream">
+       <property name="consumerKey" value="${consumerKey}"/>
+       <property name="consumerSecret" value="${consumerSecret}"/>
+       <property name="token" value="${token}"/>
+       <property name="tokenSecret" value="${tokenSecret}"/>
+       <property name="filters" value="${filters}"/>
+    </bean>
+    <bean id="nioHttpServer" class="com.ebuddy.twitter.nio.server.NioHttpServer" init-method="startServer" destroy-method="stopServer">
+    </bean>
+</beans>
