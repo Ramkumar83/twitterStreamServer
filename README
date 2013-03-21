@@ -1,1 +1,19 @@
-This file was created by IntelliJ IDEA 12.0.4 for binding GitHub repository
+Pull the code from git hub
+Run mvn clean install
+Run mvn assembly:assembly
+Go to the target folder and unzip the twitterStreamServer.zip.
+Go into the unzipped folder and run the below command
+java -jar twitterStreamServer-1.0.jar
+
+There is a property file in src/main/resources/twitterStream.properties which can be configured with the following values
+
+consumerKey, consumerSecret, token, tokenSecret and  filters
+
+filters can be a comma separated value from which the twitter will stream data to the server.
+
+The other details can be found in the twitter app page.
+
+
+A Twitter Cli client can be downloaded from
+
+    https://github.com/Ramkumar83/twitterCli
