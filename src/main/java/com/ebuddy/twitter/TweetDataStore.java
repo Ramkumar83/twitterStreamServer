@@ -30,7 +30,7 @@ public class TweetDataStore {
 
     private void initialize(){
         for(String filter : filters){
-            tweets.put(filter, new ConcurrentLinkedQueue<String>());
+            tweets.put(filter.toLowerCase(), new ConcurrentLinkedQueue<String>());
         }
     }
 
@@ -42,14 +42,14 @@ public class TweetDataStore {
 
     public void addTweet(String tweet, String user){
         for(String filter : filters){
-            if(tweet.contains(filter)){
-                tweets.get(filter).add(tweet + " by " + user);
+            if(tweet.toLowerCase().contains(filter.toLowerCase())){
+                tweets.get(filter.toLowerCase()).add(tweet + " by " + user);
             }
         }
     }
 
     public String [] getLatestTweets(String filter){
-        ConcurrentLinkedQueue<String> filteredTweets = tweets.get(filter);
+        ConcurrentLinkedQueue<String> filteredTweets = tweets.get(filter.toLowerCase());
         if(filteredTweets != null){
             String[] latestTweets = filteredTweets.toArray(new String[filteredTweets.size()]);
             filteredTweets.clear();

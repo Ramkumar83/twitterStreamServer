@@ -13,6 +13,8 @@ filters can be a comma separated value from which the twitter will stream data t
 
 The other details can be found in the twitter app page.
 
+There is a property file in src/main/resources/httpServer.properties which can be used to configured the http server port.
+
 
 A Twitter Cli client can be downloaded from
 

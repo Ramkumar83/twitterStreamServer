@@ -15,9 +15,9 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 public class NioHttpServer {
 
     private int port;
-
+    private ServerBootstrap b;
     public void run() throws Exception {
-        ServerBootstrap b = new ServerBootstrap();
+        b = new ServerBootstrap();
 
         try {
             b.group(new NioEventLoopGroup(), new NioEventLoopGroup())
@@ -27,22 +27,28 @@ public class NioHttpServer {
             Channel ch = b.bind(port).sync().channel();
             ch.closeFuture().sync();
         } finally {
-            b.shutdown();
+           stopServer();
         }
     }
 
     public void startServer(){
         System.out.println("starting http server.....");
-        port = 10000;
         try {
             this.run();
         } catch (Exception e) {
-            System.out.println("Error Starting netty server");
+            System.out.println("Error Starting http server.....");
             throw new RuntimeException();
         }
     }
 
     public void stopServer(){
         System.out.println("Stopping http server.....");
+        if(b != null){
+            b.shutdown();
+        }
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }
