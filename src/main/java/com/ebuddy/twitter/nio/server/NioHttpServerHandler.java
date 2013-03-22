@@ -26,13 +26,13 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
  */
 public class NioHttpServerHandler extends ChannelInboundMessageHandlerAdapter<Object> {
 
-    private HttpRequest request;
     private final StringBuilder buf = new StringBuilder();
 
     @Override
     public void messageReceived(ChannelHandlerContext ctx, Object msg) throws Exception {
+        HttpRequest request = null;
         if (msg instanceof HttpRequest) {
-            HttpRequest request = this.request = (HttpRequest) msg;
+            request = (HttpRequest) msg;
             QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
             Map<String, List<String>> params = queryStringDecoder.parameters();
             List<String> filter = params.get("filter");
@@ -45,13 +45,13 @@ public class NioHttpServerHandler extends ChannelInboundMessageHandlerAdapter<Ob
         if (msg instanceof HttpContent) {
             if (msg instanceof LastHttpContent) {
                 LastHttpContent trailer = (LastHttpContent) msg;
-                writeResponse(ctx, trailer);
+                writeResponse(ctx, trailer, request);
             }
         }
     }
 
 
-    private void writeResponse(ChannelHandlerContext ctx, HttpObject currentObj) {
+    private void writeResponse(ChannelHandlerContext ctx, HttpObject currentObj, HttpRequest request) {
         boolean keepAlive = isKeepAlive(request);
         FullHttpResponse response = new DefaultFullHttpResponse(
                 HTTP_1_1, currentObj.getDecoderResult().isSuccess()? OK : BAD_REQUEST,
